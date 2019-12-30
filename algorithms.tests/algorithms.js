@@ -7,7 +7,7 @@ const lesserPower = n => {
     return NaN;
   }
 
-  let r = 1;
+  let r = 2;
 
   while (Math.pow(2, r) <= n) {
     r++;
