@@ -1,29 +1,26 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
 :root {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
+* {
   box-sizing: border-box;
 }
 
-h1 {
+body {
+  font-family: 'Roboto', sans-serif;
   margin: 0;
 }
 
 header {
-  height: 45px;
+  height: 39px;
 }
 
 nav {
   position: fixed;
-  right: 0;
-  left: 0;
   top: 0;
-  height: 45px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,7 +30,6 @@ nav {
 .nav-links ul {
   display: flex;
   align-items: center;
-  height: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -54,8 +50,8 @@ nav {
 }
 
 .nav-links ul li:hover > a {
-  padding-top: 15px;
-  padding-bottom: 5px;
+  animation: menu 1s;
+  background-color: #cc122d;
 }
 
 .nav-links .dropdown {
@@ -97,7 +93,6 @@ nav {
 }
 
 nav .logo {
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,12 +101,14 @@ nav .logo {
 }
 
 nav .logo .icon {
+  position: relative;
   fill: white;
-  height: 60%;
+  height: 30px;
+  animation: spinner 1s;
 }
 
 .start-page-img {
-  height: calc(100vh - 45px);
+  height: calc(100vh - 39px);
   background-image: url('../img/start-page-img.jpg');
   background-size: cover;
   background-position: center center;
@@ -175,6 +172,7 @@ footer .icon {
 */
 
 .news-section h2 {
+  font-size: 3rem;
   text-align: center;
 }
 
@@ -201,4 +199,26 @@ footer .icon {
 
 .active {
   background-color: #cc122d;
+}
+
+@keyframes spinner {
+  from {
+    left: 120%;
+    transform: rotateY(0deg);
+  }
+
+  to {
+    left: 0;
+    transform: rotateY(-360deg);
+  }
+}
+
+@keyframes menu {
+  from {
+    transform: rotateX(0deg);
+  }
+
+  to {
+    transform: rotateX(360deg);
+  }
 }
