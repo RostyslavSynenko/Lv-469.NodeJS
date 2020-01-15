@@ -13,6 +13,10 @@ body {
   margin: 0;
 }
 
+.active {
+  background-color: #cc122d;
+}
+
 header {
   height: 39px;
 }
@@ -25,6 +29,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   background-color: #181733;
+  z-index: 2;
 }
 
 .nav-links ul {
@@ -116,8 +121,9 @@ nav .logo .icon {
 
 .history,
 .last-victory {
-  background-color: white;
   padding: 0 20%;
+  background-color: white;
+  text-align: justify;
 }
 
 .history h1,
@@ -127,11 +133,8 @@ nav .logo .icon {
   font-size: 2.5rem;
 }
 
-.history figure {
-  text-align: right;
-}
-
 .history figcaption {
+  text-align: right;
   color: grey;
 }
 
@@ -171,6 +174,10 @@ footer .icon {
   News page
 */
 
+.news-section {
+  min-width: 100vh;
+}
+
 .news-section h2 {
   font-size: 3rem;
   text-align: center;
@@ -180,13 +187,23 @@ footer .icon {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  position: relative;
+  animation: news 1s;
   text-align: center;
 }
 
 .news-section .news-container .news {
   width: 30%;
   margin-bottom: 50px;
+  background-color: white;
   box-shadow: 2px 2px 10px black;
+  transition: all 0.3s;
+}
+
+.news-section .news-container .news:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  box-shadow: 4px 4px 15px black;
 }
 
 .news-section .news-container .news img {
@@ -197,9 +214,7 @@ footer .icon {
   padding: 0 20px;
 }
 
-.active {
-  background-color: #cc122d;
-}
+/* Animations */
 
 @keyframes spinner {
   from {
@@ -220,5 +235,19 @@ footer .icon {
 
   to {
     transform: rotateX(360deg);
+  }
+}
+
+@keyframes news {
+  from {
+    top: 700px;
+    transform: scale(0);
+    opacity: 0.1;
+  }
+
+  to {
+    top: 0;
+    transform: scale(1);
+    opacity: 1;
   }
 }
