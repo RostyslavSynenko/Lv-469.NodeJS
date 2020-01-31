@@ -240,7 +240,7 @@ footer .icon {
 
 @keyframes news {
   from {
-    top: 700px;
+    top: 100vh;
     transform: scale(0);
     opacity: 0.1;
   }
