@@ -2,6 +2,11 @@
 
 :root {
   scroll-behavior: smooth;
+  --header-height: 39px;
+  --footer-height: 20vh;
+  --main-height: calc(
+    100vh - var(--header-height) - var(--footer-height)
+  );
 }
 
 * {
@@ -11,6 +16,17 @@
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0.83em 0;
+  text-align: center;
 }
 
 .active {
@@ -102,6 +118,10 @@ nav {
   text-decoration: underline;
 }
 
+.nav-links.toggle-hamburger {
+  display: block;
+}
+
 nav .hamburger-icon {
   display: none;
   position: absolute;
@@ -132,8 +152,12 @@ nav .logo .icon {
   animation: spinner 1s;
 }
 
+main {
+  min-height: var(--main-height);
+}
+
 .start-page-img {
-  height: calc(100vh - 39px);
+  height: calc(100vh - var(--header-height));
   background-image: url('../img/start-page-img.jpg');
   background-size: cover;
   background-position: center center;
@@ -142,7 +166,7 @@ nav .logo .icon {
 .history,
 .last-victory,
 .comments-section,
-.form-section {
+.fans-form-section {
   padding: 0 10%;
   background-color: white;
   text-align: justify;
@@ -151,7 +175,6 @@ nav .logo .icon {
 .history h1,
 .last-victory h1 {
   padding-top: 50px;
-  text-align: center;
   font-size: 2.5rem;
 }
 
@@ -202,7 +225,6 @@ footer .icon {
 
 .news-section h2 {
   font-size: 3rem;
-  text-align: center;
 }
 
 .news-section .news-container {
@@ -236,14 +258,6 @@ footer .icon {
   padding: 0 20px;
 }
 
-.comments-section {
-  min-height: calc(80vh - 39px);
-}
-
-.comments-section h1 {
-  text-align: center;
-}
-
 .comments-section .comment {
   margin-bottom: 40px;
   padding-bottom: 20px;
@@ -260,23 +274,23 @@ footer .icon {
   font-size: 1.2rem;
 }
 
-.form-section {
+.fans-form-section {
   margin-bottom: 20px;
 }
 
-.form-section form {
+.fans-form-section form {
   display: flex;
   justify-content: space-between;
 }
 
-.form-section textarea {
+.fans-form-section textarea {
   width: 70%;
   height: 150px;
 }
 
-.form-section [type='submit'],
+.fans-form-section [type='submit'],
 .admin-section .add-news-container [type='submit'] {
-  display: inline-block;
+  display: block;
   width: 120px;
   height: 30px;
   align-self: flex-end;
@@ -288,29 +302,33 @@ footer .icon {
   cursor: pointer;
 }
 
-.form-section [type='submit']:hover,
+.fans-form-section [type='submit']:hover,
 .admin-section .add-news-container [type='submit']:hover {
   background-color: #153564;
 }
 
 .admin-section {
-  padding: 0 20%;
-  margin-bottom: 60px;
+  padding-bottom: 60px;
 }
 
-.admin-section .add-image img {
-  width: 400px;
-  height: auto;
+.admin-section .add-image,
+.admin-section .add-news-container {
+  max-width: 768px;
+  margin: auto;
 }
 
 .admin-section .add-news-container {
   display: flex;
-  justify-content: space-around;
   margin-top: 60px;
 }
 
+.admin-section .add-image img {
+  max-width: 400px;
+  height: auto;
+}
+
 .admin-section .add-news-container .add-news {
-  width: 400px;
+  max-width: 100%;
 }
 
 .admin-section .add-news-container .add-news [type='text'],
@@ -322,8 +340,15 @@ footer .icon {
 }
 
 .admin-section .add-news-container .add-news textarea {
+  margin-bottom: 0;
   height: 250px;
   resize: none;
+}
+
+.admin-section .add-image [type='file'],
+.admin-section .add-news-container [type='submit'] {
+  display: inline-block;
+  margin-left: 50px;
 }
 
 /* Animations */
@@ -423,6 +448,61 @@ footer .icon {
 
   .news-section h2 {
     font-size: 2rem;
+  }
+
+  .fans-form-section form {
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .fans-form-section form textarea {
+    width: 100%;
+  }
+
+  .fans-form-section [type='submit'] {
+    align-self: unset;
+    margin-top: 40px;
+  }
+
+  .comments-section .comment .data-name .comment-data,
+  .comments-section .comment .data-name .fan-name {
+    font-size: 0.8em;
+  }
+
+  .admin-section .add-image,
+  .admin-section .add-news-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .admin-section .add-image,
+  .admin-section .add-news-container {
+    padding: 0 20px;
+  }
+
+  .admin-section .add-news-container .add-news {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+  }
+
+  .admin-section .add-image [type='file'] {
+    margin-top: 30px;
+  }
+
+  .admin-section .add-news-container [type='submit'] {
+    margin: 30px auto 0;
+  }
+
+  .admin-section .add-image img,
+  .admin-section
+    .add-news-container
+    .add-news
+    [type='text'],
+  .admin-section .add-news-container .add-news textarea {
+    width: 100%;
   }
 }
 @media screen and (min-width: 768px) and (max-width: 992px) {

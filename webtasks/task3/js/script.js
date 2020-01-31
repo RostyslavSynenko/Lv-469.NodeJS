@@ -2,11 +2,7 @@ const hamburger = document.querySelector('.hamburger-icon');
 
 const openMenu = () => {
   const menu = document.querySelector('.nav-links');
-  if (menu.style.display === 'block') {
-    menu.style.display = 'none';
-  } else {
-    menu.style.display = 'block';
-  }
+  menu.classList.toggle('toggle-hamburger');
 };
 
 hamburger.addEventListener('click', openMenu);
