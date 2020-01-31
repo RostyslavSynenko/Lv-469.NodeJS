@@ -389,6 +389,10 @@ td {
   border-collapse: collapse;
 }
 
+.error {
+  border: 1px solid red;
+}
+
 /* Animations */
 
 @keyframes spinner {
