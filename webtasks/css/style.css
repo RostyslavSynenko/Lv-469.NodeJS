@@ -286,13 +286,16 @@ footer .icon {
 .fans-form-section textarea {
   width: 70%;
   height: 150px;
+  resize: vertical;
+  font-family: 'Roboto', sans-serif;
 }
 
 .fans-form-section [type='submit'],
+.admin-section .add-image .custom-img-upload,
 .admin-section .add-news-container [type='submit'] {
-  display: block;
-  width: 120px;
-  height: 30px;
+  display: inline-block;
+  min-width: 120px;
+  padding: 7px;
   align-self: flex-end;
   font-size: 1.1rem;
   background-color: #164284;
@@ -303,6 +306,7 @@ footer .icon {
 }
 
 .fans-form-section [type='submit']:hover,
+.admin-section .add-image .custom-img-upload:hover,
 .admin-section .add-news-container [type='submit']:hover {
   background-color: #153564;
 }
@@ -313,6 +317,7 @@ footer .icon {
 
 .admin-section .add-image,
 .admin-section .add-news-container {
+  padding: 0 20px;
   max-width: 768px;
   margin: auto;
 }
@@ -325,6 +330,10 @@ footer .icon {
 .admin-section .add-image img {
   max-width: 400px;
   height: auto;
+}
+
+.admin-section .add-image [type='file'] {
+  display: none;
 }
 
 .admin-section .add-news-container .add-news {
@@ -345,10 +354,56 @@ footer .icon {
   resize: none;
 }
 
-.admin-section .add-image [type='file'],
+.admin-section .add-image .custom-img-upload,
 .admin-section .add-news-container [type='submit'] {
-  display: inline-block;
   margin-left: 50px;
+}
+
+.contacts-map-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.contacts-map-container .contacts {
+  width: 25vw;
+  min-height: calc(var(--main-height) - 6vh);
+  border: 2px solid #cc122d;
+}
+
+.contacts-map-container #map {
+  width: 65vw;
+  height: var(--main-height);
+}
+
+.calendar {
+  width: 80%;
+  margin: auto;
+}
+
+.calendar table,
+th,
+td {
+  border: 1px solid black;
+}
+
+.calendar th,
+td {
+  height: 50px;
+}
+
+.calendar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.error {
+  border: 1px solid red;
+  box-shadow: 0 0 2px red;
+}
+
+.error-message {
+  color: red;
 }
 
 /* Animations */
@@ -477,19 +532,15 @@ footer .icon {
     align-items: center;
   }
 
-  .admin-section .add-image,
-  .admin-section .add-news-container {
-    padding: 0 20px;
-  }
-
   .admin-section .add-news-container .add-news {
     display: flex;
     flex-direction: column;
     width: 400px;
   }
 
-  .admin-section .add-image [type='file'] {
+  .admin-section .add-image .custom-img-upload {
     margin-top: 30px;
+    align-self: unset;
   }
 
   .admin-section .add-news-container [type='submit'] {
