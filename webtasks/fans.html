@@ -16,7 +16,7 @@
         <ul>
           <li class="active"><a href="index.html">Home</a></li>
           <li class="dropdown">
-            <a class="matches" href="">Matches</a>
+            <a class="matches" href="" onclick="return false">Matches</a>
               <div class="dropdown-content">
                 <a href="calendar.html">Calendar of matches</a>
                 <a href="#">Next game</a>
@@ -74,7 +74,10 @@
     <section class="fans-form-section">
         <h2>Send appeal</h2>
         <form class="appeal-form">
-            <textarea placeholder="Write an appeal..."></textarea>
+            <div class="appeal-wrapper">
+              <textarea placeholder="Write an appeal..."></textarea>
+            </div>
+            
             <input type="submit" value="Send">
         </form>
     </section>

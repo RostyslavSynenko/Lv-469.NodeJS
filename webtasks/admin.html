@@ -16,7 +16,7 @@
         <ul>
           <li class="active"><a href="index.html">Home</a></li>
           <li class="dropdown">
-            <a class="matches" href="">Matches</a>
+            <a class="matches" href="" onclick="return false">Matches</a>
               <div class="dropdown-content">
                 <a href="calendar.html">Calendar of matches</a>
                 <a href="#">Next game</a>
@@ -55,22 +55,22 @@
   </header>
   <main>
     <section class="admin-section">
-        <h1>Add News</h1>
+      <h1>Add News</h1>
         <form>
-            <div class="add-image">
-                <img class="img-placeholder" src="img/img-placeholder.png" alt="Image placeholder">
-                <label for="news-image" class="custom-img-upload">
-                  <i class="fa fa-cloud-upload"></i> Upload image
-              </label>
-              <input id="news-image" type="file" accept=".jpg, .jpeg, .png .svg">
+          <div class="add-image">
+            <img class="img-placeholder" src="img/img-placeholder.png" alt="Image placeholder">
+            <label for="news-image" class="custom-img-upload">
+              <i class="fa fa-cloud-upload"></i> Upload image
+            </label>
+            <input id="news-image" type="file" accept=".jpg, .jpeg, .png .svg">
+          </div>
+          <div class="add-news-container">
+            <div class="add-news">
+              <input id="news-title" type="text" name=title placeholder="News title">
+                <textarea id="news-text" placeholder="News text"></textarea>
             </div>
-            <div class="add-news-container">
-                <div class="add-news">
-                    <input id="news-title" type="text" name=title placeholder="News title">
-                    <textarea id="news-text" placeholder="News text"></textarea>
-                </div>
-                <input type="submit" value="Add news">
-            </div>
+              <input type="submit" value="Add news">
+          </div>
         </form>
     </section>
   </main>

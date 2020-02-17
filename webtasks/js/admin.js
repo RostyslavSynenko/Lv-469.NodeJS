@@ -8,48 +8,104 @@ const imgPlaceholder = document.querySelector(
   '.img-placeholder',
 );
 
-const addError = (anchor) => {
-  anchor.classList.add('error');
+const handleFiles = (files) => {
+  for (let i = 0; i < files.length; i++) {
+    imgPlaceholder.src = URL.createObjectURL(files[i]);
+    imgPlaceholder.onload = () => {
+      URL.revokeObjectURL(this.src);
+    };
+  }
 };
 
-const validateForm = () => {
+const removeError = () => {
   addNewsForm
     .querySelectorAll('.error')
     .forEach((el) => el.classList.remove('error'));
+  addNewsForm
+    .querySelectorAll('.error-message')
+    .forEach((el) => el.remove());
+};
 
-  let isError = false;
+const addError = (anchor, message) => {
+  anchor.classList.add('error');
 
-  if (!newsImage.value.length) {
+  const errorMessage = document.createElement('span');
+  errorMessage.classList.add('error-message');
+  errorMessage.innerHTML = message;
+
+  if (anchor.type === 'file') {
+    const customImgUpload = addNewsForm.querySelector(
+      '.custom-img-upload',
+    );
+
+    customImgUpload.after(errorMessage);
+  } else {
+    anchor.before(errorMessage);
+  }
+
+  return errorMessage;
+};
+
+const validateForm = () => {
+  let isError = null;
+
+  if (!newsImage.value) {
     imgPlaceholder.classList.add('error');
-    isError = true;
+    isError = addError(newsImage, 'Image is required!');
   }
 
-  if (!newsTitle.value) {
-    isError = true;
-    newsTitle.classList.add('error');
+  const minTitleLength = 9;
+  const maxTitleLength = 49;
+
+  if (
+    newsTitle.value.length < minTitleLength ||
+    newsTitle.value.length > maxTitleLength
+  ) {
+    isError = addError(
+      newsTitle,
+      `Title must contain at least ${minTitleLength} and maximum ${maxTitleLength} symbols`,
+    );
   }
 
-  if (!newsText.value) {
-    isError = true;
-    newsText.classList.add('error');
+  const minNewsLength = 49;
+
+  if (newsText.value < minNewsLength) {
+    isError = addError(
+      newsText,
+      `News must contain at least ${minNewsLength} symbols`,
+    );
   }
 
   return isError;
 };
 
 const showModalSuccess = () => {
-  console.log('Success');
+  const successMessage = document.createElement('div');
+  successMessage.classList.add('success-message');
+  successMessage.innerHTML =
+    'Success! News has been added!';
+
+  document.body.append(successMessage);
+  setTimeout(() => {
+    successMessage.remove();
+  }, 3000);
 };
 
 const addNews = (event) => {
   event.preventDefault();
+
+  removeError();
 
   if (validateForm()) {
     return;
   }
 
   addNewsForm.reset();
+  imgPlaceholder.src = 'img/img-placeholder.png';
   showModalSuccess();
 };
 
 addNewsForm.addEventListener('submit', addNews);
+newsImage.addEventListener('change', (event) => {
+  handleFiles(event.target.files);
+});
