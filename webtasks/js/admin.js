@@ -63,7 +63,8 @@ const validateForm = () => {
   ) {
     isError = addError(
       newsTitle,
-      `Title must contain at least ${minTitleLength} and maximum ${maxTitleLength} symbols`,
+      `Title must contain at least ${minTitleLength +
+        1} and maximum ${maxTitleLength + 1} symbols`,
     );
   }
 
@@ -72,7 +73,8 @@ const validateForm = () => {
   if (newsText.value < minNewsLength) {
     isError = addError(
       newsText,
-      `News must contain at least ${minNewsLength} symbols`,
+      `News must contain at least ${minNewsLength +
+        1} symbols`,
     );
   }
 
@@ -101,6 +103,7 @@ const addNews = (event) => {
   }
 
   addNewsForm.reset();
+  // Set default image
   imgPlaceholder.src = 'img/img-placeholder.png';
   showModalSuccess();
 };

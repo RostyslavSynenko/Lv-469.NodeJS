@@ -3,6 +3,9 @@ const commentsSection = document.querySelector(
 );
 const appealForm = document.querySelector('.appeal-form');
 const appealMessage = appealForm.querySelector('textarea');
+
+const isOnline = () => window.navigator.onLine;
+
 let footballFanCount =
   localStorage.getItem('footballFanCount') || 3;
 
@@ -40,8 +43,8 @@ const sendAppeal = (event) => {
 
   removeError();
 
-  const minLength = 19;
-  if (appealMessage.value.length < minLength) {
+  const minAppealLength = 19;
+  if (appealMessage.value.length < minAppealLength) {
     addError(appealMessage);
     return;
   }
@@ -65,25 +68,34 @@ const sendAppeal = (event) => {
 
   commentsSection.insertAdjacentHTML('beforeend', comment);
   /*
-  localStorage.setItem(
-    'fanComments',
-    commentsSection.innerHTML,
-  );
-  localStorage.setItem(
-    'footballFanCount',
-    footballFanCount,
-  );
+  if (isOnline) {
+    // send to server
+  } else {
+    if (localStorage.getItem('fanComments')) {
+      localStorage.setItem(
+        'fanComments',
+        localStorage.getItem('fanComments') + comment,
+      );
+    } else {
+      localStorage.setItem('fanComments', comment);
+    }
+
+    localStorage.setItem(
+      'footballFanCount',
+      footballFanCount,
+    );
+  }
   */
   appealForm.reset();
   showModalSuccess();
 };
 
 appealForm.addEventListener('submit', sendAppeal);
-appealMessage.addEventListener('focus', removeError);
 document.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem('fanComments')) {
-    commentsSection.innerHTML = localStorage.getItem(
-      'fanComments',
+  if (!isOnline && localStorage.getItem('fanComments')) {
+    commentsSection.insertAdjacentHTML(
+      'beforeend',
+      localStorage.getItem('fanComments'),
     );
   }
 });
