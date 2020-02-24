@@ -7,14 +7,26 @@ const newsText = document.getElementById('news-text');
 const imgPlaceholder = document.querySelector(
   '.img-placeholder',
 );
+const data = {
+  imgSrc: '',
+  title: '',
+  news: '',
+};
 
-const handleFiles = (files) => {
-  for (let i = 0; i < files.length; i++) {
-    imgPlaceholder.src = URL.createObjectURL(files[i]);
-    imgPlaceholder.onload = () => {
-      URL.revokeObjectURL(this.src);
-    };
-  }
+const isOnline = () => window.navigator.onLine;
+
+const handleFiles = (event) => {
+  const file = event.target.files[0];
+  const fileReader = new FileReader();
+
+  fileReader.onload = (event) => {
+    if (!event.target.result) return;
+
+    imgPlaceholder.src = event.target.result;
+    data.imgSrc = event.target.result;
+  };
+
+  fileReader.readAsDataURL(file);
 };
 
 const removeError = () => {
@@ -93,6 +105,16 @@ const showModalSuccess = () => {
   }, 3000);
 };
 
+const setNewsToStorage = (newData) => {
+  if (localStorage.getItem('news')) {
+    const news = JSON.parse(localStorage.getItem('news'));
+    news.push(newData);
+    localStorage.setItem('news', JSON.stringify(news));
+  } else {
+    localStorage.setItem('news', JSON.stringify([newData]));
+  }
+};
+
 const addNews = (event) => {
   event.preventDefault();
 
@@ -102,13 +124,24 @@ const addNews = (event) => {
     return;
   }
 
+  data.title = newsTitle.value;
+  data.news = newsText.value;
+
+  if (isOnline) {
+    setTimeout(() => {
+      setNewsToStorage(data);
+    }, 1500);
+  } else {
+    setNewsToStorage(data);
+  }
+
   addNewsForm.reset();
   // Set default image
   imgPlaceholder.src = 'img/img-placeholder.png';
   showModalSuccess();
 };
 
-addNewsForm.addEventListener('submit', addNews);
-newsImage.addEventListener('change', (event) => {
-  handleFiles(event.target.files);
+document.addEventListener('DOMContentLoaded', () => {
+  addNewsForm.addEventListener('submit', addNews);
+  newsImage.addEventListener('change', handleFiles);
 });

@@ -38,6 +38,46 @@ const showModalSuccess = () => {
   }, 3000);
 };
 
+const setCommentToStorage = (comment) => {
+  if (localStorage.getItem('fanComments')) {
+    const comments = JSON.parse(
+      localStorage.getItem('fanComments'),
+    );
+    comments.push(comment);
+    localStorage.setItem(
+      'fanComments',
+      JSON.stringify(comments),
+    );
+  } else {
+    localStorage.setItem(
+      'fanComments',
+      JSON.stringify([comment]),
+    );
+  }
+
+  localStorage.setItem(
+    'footballFanCount',
+    footballFanCount,
+  );
+};
+
+const renderComments = () => {
+  if (localStorage.getItem('fanComments')) {
+    const comments = JSON.parse(
+      localStorage.getItem('fanComments'),
+    );
+
+    comments.forEach((comment) => {
+      commentsSection.insertAdjacentHTML(
+        'beforeend',
+        comment,
+      );
+    });
+
+    localStorage.removeItem('fanComments');
+  }
+};
+
 const sendAppeal = (event) => {
   event.preventDefault();
 
@@ -66,36 +106,23 @@ const sendAppeal = (event) => {
     </div>
   `;
 
-  commentsSection.insertAdjacentHTML('beforeend', comment);
-  /*
   if (isOnline) {
     // send to server
+    setTimeout(() => {
+      setCommentToStorage(comment);
+      renderComments();
+    }, 1500);
   } else {
-    if (localStorage.getItem('fanComments')) {
-      localStorage.setItem(
-        'fanComments',
-        localStorage.getItem('fanComments') + comment,
-      );
-    } else {
-      localStorage.setItem('fanComments', comment);
-    }
-
-    localStorage.setItem(
-      'footballFanCount',
-      footballFanCount,
-    );
+    setCommentToStorage(comment);
   }
-  */
+
   appealForm.reset();
   showModalSuccess();
 };
 
-appealForm.addEventListener('submit', sendAppeal);
 document.addEventListener('DOMContentLoaded', () => {
-  if (!isOnline && localStorage.getItem('fanComments')) {
-    commentsSection.insertAdjacentHTML(
-      'beforeend',
-      localStorage.getItem('fanComments'),
-    );
-  }
+  appealForm.addEventListener('submit', sendAppeal);
+  document.addEventListener('online', renderComments);
+
+  renderComments();
 });
