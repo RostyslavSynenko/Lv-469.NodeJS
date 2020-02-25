@@ -1,6 +1,7 @@
 const newsContainer = document.querySelector(
   '.news-container',
 );
+const isOnline = () => window.navigator.onLine;
 
 const renderNews = () => {
   if (localStorage.getItem('news')) {
@@ -24,5 +25,8 @@ const renderNews = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderNews();
+  window.addEventListener('online', renderNews);
+  if (isOnline()) {
+    renderNews();
+  }
 });

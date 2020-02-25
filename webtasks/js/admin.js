@@ -13,6 +13,7 @@ const data = {
   news: '',
 };
 
+const useLocalStorage = true;
 const isOnline = () => window.navigator.onLine;
 
 const handleFiles = (event) => {
@@ -127,12 +128,16 @@ const addNews = (event) => {
   data.title = newsTitle.value;
   data.news = newsText.value;
 
-  if (isOnline) {
+  if (isOnline()) {
     setTimeout(() => {
       setNewsToStorage(data);
     }, 1500);
   } else {
-    setNewsToStorage(data);
+    if (useLocalStorage) {
+      setNewsToStorage(data);
+    } else {
+      // indexedDB
+    }
   }
 
   addNewsForm.reset();

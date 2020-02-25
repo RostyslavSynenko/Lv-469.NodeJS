@@ -98,10 +98,6 @@ nav {
   z-index: 1;
 }
 
-.nav-links .dropdown:hover .dropdown-content {
-  display: block;
-}
-
 .nav-links .dropdown-content a {
   display: block;
   color: white;
@@ -612,6 +608,16 @@ td {
 
   .calendar-wrapper {
     overflow-x: auto;
+  }
+
+  .active {
+    display: block !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .nav-links .dropdown:hover .dropdown-content {
+    display: block;
   }
 }
 

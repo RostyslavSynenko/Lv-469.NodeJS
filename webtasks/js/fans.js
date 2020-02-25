@@ -4,6 +4,7 @@ const commentsSection = document.querySelector(
 const appealForm = document.querySelector('.appeal-form');
 const appealMessage = appealForm.querySelector('textarea');
 
+const useLocalStorage = true;
 const isOnline = () => window.navigator.onLine;
 
 let footballFanCount =
@@ -106,14 +107,18 @@ const sendAppeal = (event) => {
     </div>
   `;
 
-  if (isOnline) {
+  if (isOnline()) {
     // send to server
     setTimeout(() => {
       setCommentToStorage(comment);
       renderComments();
     }, 1500);
   } else {
-    setCommentToStorage(comment);
+    if (useLocalStorage) {
+      setCommentToStorage(comment);
+    } else {
+      // indexedDB
+    }
   }
 
   appealForm.reset();
@@ -122,7 +127,9 @@ const sendAppeal = (event) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   appealForm.addEventListener('submit', sendAppeal);
-  document.addEventListener('online', renderComments);
+  window.addEventListener('online', renderComments);
 
-  renderComments();
+  if (isOnline()) {
+    renderComments();
+  }
 });
