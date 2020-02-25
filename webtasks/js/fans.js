@@ -71,7 +71,7 @@ const renderComments = () => {
     comments.forEach((comment) => {
       commentsSection.insertAdjacentHTML(
         'beforeend',
-        comment,
+        comment.comment,
       );
     });
 
@@ -81,6 +81,11 @@ const renderComments = () => {
 
 const sendAppeal = (event) => {
   event.preventDefault();
+
+  const comment = {
+    id: null,
+    comment: '',
+  };
 
   removeError();
 
@@ -97,7 +102,9 @@ const sendAppeal = (event) => {
     hour: '2-digit',
     minute: '2-digit',
   });
-  const comment = `
+
+  comment.id = Date.now();
+  comment.comment = `
     <div class="comment">
       <p>${appealMessage.value}</p>
       <div class="data-name">

@@ -8,6 +8,7 @@ const imgPlaceholder = document.querySelector(
   '.img-placeholder',
 );
 const data = {
+  id: null,
   imgSrc: '',
   title: '',
   news: '',
@@ -125,6 +126,7 @@ const addNews = (event) => {
     return;
   }
 
+  data.id = Date.now();
   data.title = newsTitle.value;
   data.news = newsText.value;
 
