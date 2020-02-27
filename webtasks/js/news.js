@@ -24,9 +24,6 @@ const renderNews = () => {
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('load', () => {
   window.addEventListener('online', renderNews);
-  if (isOnline()) {
-    renderNews();
-  }
 });

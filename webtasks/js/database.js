@@ -13,14 +13,23 @@ class IndexedDB {
     request.onupgradeneeded = (event) => {
       this.db = event.target.result;
       this.stores.forEach((store) => {
-        this.db.createObjectStore(store, { keyPath: 'id' });
+        this.db.createObjectStore(store, {
+          keyPath: 'id',
+        });
       });
+
+      console.log(
+        `${this.nameDB} database has been created or updated!`,
+      );
     };
 
-    request.onsuccess = () =>
+    request.onsuccess = (event) => {
+      this.db = event.target.result;
+
       console.log(
-        `${this.nameDB} database has been created!`,
+        `Successfuly connected to the ${this.nameDB} database!`,
       );
+    };
     request.onerror = () =>
       console.error(`Error ${request.error}`);
   }
@@ -40,16 +49,21 @@ class IndexedDB {
   }
 
   getFromStore(storeName) {
+    console.log('get');
     const transaction = this.db.transaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.getAll();
 
-    request.onsuccess = () =>
-      console.log('Success! Data has been transmitted!');
     request.onerror = () =>
       console.error(`Error ${request.error}`);
 
-    return request;
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => {
+        console.log('Success! Data has been transmitted!');
+
+        resolve(request.result);
+      };
+    });
   }
 
   clearStore(storeName) {
@@ -73,4 +87,5 @@ const database = new IndexedDB('SSITA', [
   'fanComments',
   'news',
 ]);
+
 database.initializeDB();

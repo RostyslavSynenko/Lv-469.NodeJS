@@ -4,7 +4,7 @@ const commentsSection = document.querySelector(
 const appealForm = document.querySelector('.appeal-form');
 const appealMessage = appealForm.querySelector('textarea');
 
-const useLocalStorage = true;
+const useLocalStorage = false;
 const isOnline = () => window.navigator.onLine;
 
 let footballFanCount =
@@ -63,19 +63,31 @@ const setCommentToStorage = (comment) => {
 };
 
 const renderComments = () => {
-  if (localStorage.getItem('fanComments')) {
-    const comments = JSON.parse(
-      localStorage.getItem('fanComments'),
-    );
-
-    comments.forEach((comment) => {
-      commentsSection.insertAdjacentHTML(
-        'beforeend',
-        comment.comment,
+  if (useLocalStorage) {
+    if (localStorage.getItem('fanComments')) {
+      const comments = JSON.parse(
+        localStorage.getItem('fanComments'),
       );
-    });
 
-    localStorage.removeItem('fanComments');
+      comments.forEach((comment) => {
+        commentsSection.insertAdjacentHTML(
+          'beforeend',
+          comment.comment,
+        );
+      });
+
+      localStorage.removeItem('fanComments');
+    }
+  } else {
+    // indexedDB
+    database.getFromStore('fanComments').then((comments) =>
+      comments.forEach((comment) => {
+        commentsSection.insertAdjacentHTML(
+          'beforeend',
+          comment.comment,
+        );
+      }),
+    );
   }
 };
 
@@ -105,7 +117,7 @@ const sendAppeal = (event) => {
 
   comment.id = Date.now();
   comment.comment = `
-    <div class="comment">
+    <div class="comment new-comment">
       <p>${appealMessage.value}</p>
       <div class="data-name">
         <span class="comment-data">${date}</span>
@@ -125,6 +137,7 @@ const sendAppeal = (event) => {
       setCommentToStorage(comment);
     } else {
       // indexedDB
+      database.addToStore('fanComments', comment);
     }
   }
 
@@ -136,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
   appealForm.addEventListener('submit', sendAppeal);
   window.addEventListener('online', renderComments);
 
-  if (isOnline()) {
+  if (isOnline() && database.db) {
     renderComments();
   }
 });
