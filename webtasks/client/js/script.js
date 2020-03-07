@@ -19,10 +19,12 @@ const openMenu = () => {
   menu.classList.toggle('toggle-hamburger');
 };
 
+/*
 fetch('http://localhost:5000/api/data')
   .then((response) => response.json())
   .then((response) => console.log(response.message))
   .catch((err) => console.log(`Error: ${err.message}`));
+*/
 
 hamburger.addEventListener('click', openMenu);
 matches.addEventListener('click', showDropDownContent);

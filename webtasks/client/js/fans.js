@@ -6,9 +6,9 @@ const appealMessage = appealForm.querySelector('textarea');
 
 let wasRendered = false;
 
-const useLocalStorage = localStorage.getItem(
-  'useLocalStorage',
-);
+const useLocalStorage =
+  localStorage.getItem('useLocalStorage') === 'true';
+
 const isOnline = () => window.navigator.onLine;
 
 let footballFanCount =
@@ -66,6 +66,18 @@ const setCommentToStorage = (comment) => {
   );
 };
 
+const createComment = ({ comment, author, date }) => {
+  return `
+  <div class="comment new-comment">
+    <p>${comment}</p>
+    <div class="data-name">
+      <span class="comment-data">${date}</span>
+      <span class="fan-name">${author}</span>
+    </div>
+  </div>
+`;
+};
+
 const renderComments = (online = isOnline()) => {
   if (online) {
     // get data from server and render
@@ -75,10 +87,12 @@ const renderComments = (online = isOnline()) => {
         localStorage.getItem('fanComments'),
       );
 
-      comments.forEach((comment) => {
+      comments.forEach((data) => {
+        const comment = createComment(data);
+
         commentsSection.insertAdjacentHTML(
           'beforeend',
-          comment.comment,
+          comment,
         );
       });
     }
@@ -87,10 +101,12 @@ const renderComments = (online = isOnline()) => {
     database
       .getFromStore('fanComments')
       .then((comments) => {
-        comments.forEach((comment) => {
+        comments.forEach((data) => {
+          const comment = createComment(data);
+
           commentsSection.insertAdjacentHTML(
             'beforeend',
-            comment.comment,
+            comment,
           );
         });
       });
@@ -99,11 +115,6 @@ const renderComments = (online = isOnline()) => {
 
 const sendAppeal = (event) => {
   event.preventDefault();
-
-  const comment = {
-    id: null,
-    comment: '',
-  };
 
   removeError();
 
@@ -121,23 +132,15 @@ const sendAppeal = (event) => {
     minute: '2-digit',
   });
 
-  comment.id = Date.now();
-  comment.comment = `
-    <div class="comment new-comment">
-      <p>${appealMessage.value}</p>
-      <div class="data-name">
-        <span class="comment-data">${date}</span>
-        <span class="fan-name">FootballFan${footballFanCount++}</span>
-      </div>
-    </div>
-  `;
+  const comment = {
+    id: Date.now(),
+    comment: appealMessage.value,
+    author: `FootballFan${footballFanCount++}`,
+    date,
+  };
 
   if (isOnline()) {
     // send to server
-    setTimeout(() => {
-      setCommentToStorage(comment);
-      renderComments();
-    }, 1500);
   } else {
     if (useLocalStorage) {
       setCommentToStorage(comment);

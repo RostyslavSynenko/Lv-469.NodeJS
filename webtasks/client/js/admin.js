@@ -11,12 +11,11 @@ const data = {
   id: null,
   imgSrc: '',
   title: '',
-  news: '',
+  content: '',
 };
 
-const useLocalStorage = localStorage.getItem(
-  'useLocalStorage',
-);
+const useLocalStorage =
+  localStorage.getItem('useLocalStorage') === 'true';
 const isOnline = () => window.navigator.onLine;
 
 const handleFiles = (event) => {
@@ -137,7 +136,7 @@ const addNews = (event) => {
 
   data.id = Date.now();
   data.title = newsTitle.value;
-  data.news = newsText.value;
+  data.content = newsText.value;
 
   if (isOnline()) {
     // send data to the server

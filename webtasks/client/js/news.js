@@ -7,6 +7,16 @@ const useLocalStorage = localStorage.getItem(
 );
 let wasRendered = false;
 
+const createNews = ({ imgSrc, title, content }) => {
+  return `
+    <div class="news">
+      <img src="${imgSrc}" alt="">
+      <h3 class="news-title">${title}</h3>
+      <p>${content}</p>
+    </div>
+  `;
+};
+
 const renderNews = (online = isOnline()) => {
   if (online) {
     // get data from server and render
@@ -16,29 +26,19 @@ const renderNews = (online = isOnline()) => {
         localStorage.getItem('news'),
       );
 
-      allNews.forEach((news) => {
-        const data = `
-            <div class="news">
-                <img src="${news.imgSrc}" alt="">
-                <h3 class="news-title">${news.title}</h3>
-                <p>${news.news}</p>
-            </div>`;
+      allNews.forEach((data) => {
+        const news = createNews(data);
 
-        newsContainer.insertAdjacentHTML('beforeend', data);
+        newsContainer.insertAdjacentHTML('beforeend', news);
       });
     }
   } else {
     // indexedDB
     database.getFromStore('news').then((allNews) => {
-      allNews.forEach((news) => {
-        const data = `
-              <div class="news">
-                  <img src="${news.imgSrc}" alt="">
-                  <h3 class="news-title">${news.title}</h3>
-                  <p>${news.news}</p>
-              </div>`;
+      allNews.forEach((data) => {
+        const news = createNews(data);
 
-        newsContainer.insertAdjacentHTML('beforeend', data);
+        newsContainer.insertAdjacentHTML('beforeend', news);
       });
     });
   }

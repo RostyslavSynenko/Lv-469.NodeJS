@@ -2,15 +2,19 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+const commentsRoute = require('./routes/commentsRoute');
+const newsRoute = require('./routes/newsRoute');
+
 const app = express();
 
-const URL = '/api/data';
 const PORT = 5000;
 const nameDB = 'webtask';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use('/api/comments', commentsRoute);
+app.use('/api/news', newsRoute);
 
 mongoose
   .connect(`mongodb://localhost:27017/${nameDB}`, {
@@ -25,10 +29,6 @@ mongoose
   .catch((err) => {
     console.log(`DB error ${err.message}`);
   });
-
-app.get(URL, (req, res) => {
-  res.status(200).send({ message: 'HELLO!' });
-});
 
 app.listen(PORT, () => {
   console.log(`Server has started on PORT ${PORT}!`);
