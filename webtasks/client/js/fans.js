@@ -92,13 +92,17 @@ const addCommentsToThePage = (comments) => {
 const renderComments = (online = isOnline()) => {
   if (online) {
     // get data from server and render
-    getData('comments').then(({ error, comments }) => {
-      if (error) {
-        return console.error(error);
-      }
+    getData('comments')
+      .then(({ error, comments }) => {
+        if (error) {
+          return console.error(error);
+        }
 
-      addCommentsToThePage(comments);
-    });
+        addCommentsToThePage(comments);
+      })
+      .catch((error) => {
+        console.log('Error: ', error);
+      });
   } else if (useLocalStorage) {
     if (localStorage.getItem('fanComments')) {
       const comments = JSON.parse(
