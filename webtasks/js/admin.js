@@ -14,7 +14,9 @@ const data = {
   news: '',
 };
 
-const useLocalStorage = true;
+const useLocalStorage = localStorage.getItem(
+  'useLocalStorage',
+);
 const isOnline = () => window.navigator.onLine;
 
 const handleFiles = (event) => {
@@ -108,12 +110,19 @@ const showModalSuccess = () => {
 };
 
 const setNewsToStorage = (newData) => {
-  if (localStorage.getItem('news')) {
-    const news = JSON.parse(localStorage.getItem('news'));
-    news.push(newData);
-    localStorage.setItem('news', JSON.stringify(news));
+  if (useLocalStorage) {
+    if (localStorage.getItem('news')) {
+      const news = JSON.parse(localStorage.getItem('news'));
+      news.push(newData);
+      localStorage.setItem('news', JSON.stringify(news));
+    } else {
+      localStorage.setItem(
+        'news',
+        JSON.stringify([newData]),
+      );
+    }
   } else {
-    localStorage.setItem('news', JSON.stringify([newData]));
+    database.addToStore('news', newData);
   }
 };
 
@@ -131,14 +140,13 @@ const addNews = (event) => {
   data.news = newsText.value;
 
   if (isOnline()) {
-    setTimeout(() => {
-      setNewsToStorage(data);
-    }, 1500);
+    // send data to the server
   } else {
     if (useLocalStorage) {
       setNewsToStorage(data);
     } else {
       // indexedDB
+      database.addToStore('news', data);
     }
   }
 

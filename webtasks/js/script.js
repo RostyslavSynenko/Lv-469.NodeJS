@@ -3,6 +3,7 @@ const matches = document.querySelector('.matches');
 const dropDownContent = document.querySelector(
   '.dropdown-content',
 );
+localStorage.setItem('useLocalStorage', false);
 
 const showDropDownContent = () => {
   dropDownContent.classList.toggle('active');

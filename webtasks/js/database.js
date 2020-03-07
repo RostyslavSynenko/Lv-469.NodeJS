@@ -49,19 +49,20 @@ class IndexedDB {
   }
 
   getFromStore(storeName) {
-    console.log('get');
     const transaction = this.db.transaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.getAll();
-
-    request.onerror = () =>
-      console.error(`Error ${request.error}`);
 
     return new Promise((resolve, reject) => {
       request.onsuccess = () => {
         console.log('Success! Data has been transmitted!');
 
         resolve(request.result);
+      };
+
+      request.onerror = () => {
+        console.error(`Error ${request.error}`);
+        reject(`Error ${request.error}`);
       };
     });
   }
@@ -78,6 +79,7 @@ class IndexedDB {
       console.log(
         `Success! ${storeName} has been cleared!`,
       );
+
     request.onerror = () =>
       console.error(`Error ${request.error}`);
   }

@@ -4,7 +4,11 @@ const commentsSection = document.querySelector(
 const appealForm = document.querySelector('.appeal-form');
 const appealMessage = appealForm.querySelector('textarea');
 
-const useLocalStorage = false;
+let wasRendered = false;
+
+const useLocalStorage = localStorage.getItem(
+  'useLocalStorage',
+);
 const isOnline = () => window.navigator.onLine;
 
 let footballFanCount =
@@ -62,8 +66,10 @@ const setCommentToStorage = (comment) => {
   );
 };
 
-const renderComments = () => {
-  if (useLocalStorage) {
+const renderComments = (online = isOnline()) => {
+  if (online) {
+    // get data from server and render
+  } else if (useLocalStorage) {
     if (localStorage.getItem('fanComments')) {
       const comments = JSON.parse(
         localStorage.getItem('fanComments'),
@@ -75,19 +81,19 @@ const renderComments = () => {
           comment.comment,
         );
       });
-
-      localStorage.removeItem('fanComments');
     }
   } else {
     // indexedDB
-    database.getFromStore('fanComments').then((comments) =>
-      comments.forEach((comment) => {
-        commentsSection.insertAdjacentHTML(
-          'beforeend',
-          comment.comment,
-        );
-      }),
-    );
+    database
+      .getFromStore('fanComments')
+      .then((comments) => {
+        comments.forEach((comment) => {
+          commentsSection.insertAdjacentHTML(
+            'beforeend',
+            comment.comment,
+          );
+        });
+      });
   }
 };
 
@@ -145,11 +151,55 @@ const sendAppeal = (event) => {
   showModalSuccess();
 };
 
+const sendDataFromStorageToServer = () => {
+  if (useLocalStorage) {
+    if (localStorage.getItem('fanComments')) {
+      const comments = JSON.parse(
+        localStorage.getItem('fanComments'),
+      );
+
+      /*
+      
+      SEND DATA TO THE SERVER
+      
+      */
+
+      if (!wasRendered) {
+        renderComments(false);
+      }
+
+      localStorage.removeItem('fanComments');
+    }
+  } else {
+    // indexedDB
+    database
+      .getFromStore('fanComments')
+      .then((comments) => {
+        /*
+      
+      SEND DATA TO THE SERVER
+      
+      */
+      });
+
+    if (!wasRendered) {
+      renderComments(false);
+    }
+
+    database.clearStore('fanComments');
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   appealForm.addEventListener('submit', sendAppeal);
-  window.addEventListener('online', renderComments);
+  window.addEventListener(
+    'online',
+    sendDataFromStorageToServer,
+  );
 
-  if (isOnline() && database.db) {
+  setTimeout(() => {
     renderComments();
-  }
+
+    wasRendered = true;
+  }, 500);
 });
