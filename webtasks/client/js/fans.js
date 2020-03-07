@@ -78,37 +78,41 @@ const createComment = ({ comment, author, date }) => {
 `;
 };
 
+const addCommentsToThePage = (comments) => {
+  comments.forEach((data) => {
+    const comment = createComment(data);
+
+    commentsSection.insertAdjacentHTML(
+      'beforeend',
+      comment,
+    );
+  });
+};
+
 const renderComments = (online = isOnline()) => {
   if (online) {
     // get data from server and render
+    getData('comments').then(({ error, comments }) => {
+      if (error) {
+        return console.error(error);
+      }
+
+      addCommentsToThePage(comments);
+    });
   } else if (useLocalStorage) {
     if (localStorage.getItem('fanComments')) {
       const comments = JSON.parse(
         localStorage.getItem('fanComments'),
       );
 
-      comments.forEach((data) => {
-        const comment = createComment(data);
-
-        commentsSection.insertAdjacentHTML(
-          'beforeend',
-          comment,
-        );
-      });
+      addCommentsToThePage(comments);
     }
   } else {
     // indexedDB
     database
       .getFromStore('fanComments')
-      .then((comments) => {
-        comments.forEach((data) => {
-          const comment = createComment(data);
-
-          commentsSection.insertAdjacentHTML(
-            'beforeend',
-            comment,
-          );
-        });
+      .then((response) => {
+        addCommentsToThePage(response);
       });
   }
 };
@@ -141,6 +145,7 @@ const sendAppeal = (event) => {
 
   if (isOnline()) {
     // send to server
+    sendData('comments', comment);
   } else {
     if (useLocalStorage) {
       setCommentToStorage(comment);
@@ -161,11 +166,9 @@ const sendDataFromStorageToServer = () => {
         localStorage.getItem('fanComments'),
       );
 
-      /*
-      
-      SEND DATA TO THE SERVER
-      
-      */
+      comments.forEach((comment) =>
+        sendData('comments', comment),
+      );
 
       if (!wasRendered) {
         renderComments(false);
@@ -178,11 +181,9 @@ const sendDataFromStorageToServer = () => {
     database
       .getFromStore('fanComments')
       .then((comments) => {
-        /*
-      
-      SEND DATA TO THE SERVER
-      
-      */
+        comments.forEach((comment) =>
+          sendData('comments', comment),
+        );
       });
 
     if (!wasRendered) {

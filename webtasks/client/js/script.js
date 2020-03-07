@@ -19,12 +19,30 @@ const openMenu = () => {
   menu.classList.toggle('toggle-hamburger');
 };
 
-/*
-fetch('http://localhost:5000/api/data')
-  .then((response) => response.json())
-  .then((response) => console.log(response.message))
-  .catch((err) => console.log(`Error: ${err.message}`));
-*/
+const getData = async (title) => {
+  const response = await fetch(
+    `http://localhost:5000/api/${title}`,
+  );
+  const result = await response.json();
+
+  return new Promise((resolve) => resolve(result));
+};
+
+const sendData = async (title, data) => {
+  const response = await fetch(
+    `http://localhost:5000/api/${title}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(data),
+    },
+  );
+  const result = await response.json();
+
+  return new Promise((resolve) => resolve(result));
+};
 
 hamburger.addEventListener('click', openMenu);
 matches.addEventListener('click', showDropDownContent);
