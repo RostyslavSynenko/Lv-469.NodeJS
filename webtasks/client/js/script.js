@@ -1,9 +1,14 @@
+localStorage.setItem('useLocalStorage', false);
+const useLocalStorage =
+  localStorage.getItem('useLocalStorage') === 'true';
+
+const isOnline = () => window.navigator.onLine;
+
 const hamburger = document.querySelector('.hamburger-icon');
 const matches = document.querySelector('.matches');
 const dropDownContent = document.querySelector(
   '.dropdown-content'
 );
-localStorage.setItem('useLocalStorage', false);
 
 const showDropDownContent = () => {
   dropDownContent.classList.toggle('active');

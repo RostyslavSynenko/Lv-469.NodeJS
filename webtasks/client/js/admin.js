@@ -14,10 +14,6 @@ const data = {
   content: ''
 };
 
-const useLocalStorage =
-  localStorage.getItem('useLocalStorage') === 'true';
-const isOnline = () => window.navigator.onLine;
-
 const handleFiles = event => {
   const file = event.target.files[0];
   const fileReader = new FileReader();
@@ -96,15 +92,14 @@ const validateForm = () => {
   return isError;
 };
 
-const showModalSuccess = () => {
-  const successMessage = document.createElement('div');
-  successMessage.classList.add('success-message');
-  successMessage.innerHTML =
-    'Success! News has been added!';
+const showModal = (className, message) => {
+  const modal = document.createElement('div');
+  modal.classList.add(className);
+  modal.innerHTML = message;
 
-  document.body.append(successMessage);
+  document.body.append(modal);
   setTimeout(() => {
-    successMessage.remove();
+    modal.remove();
   }, 3000);
 };
 
@@ -139,7 +134,7 @@ const addNews = event => {
   data.content = newsText.value;
 
   if (isOnline()) {
-    // send data to the server
+    // server
     sendData('news', data);
   } else {
     if (useLocalStorage) {
@@ -153,7 +148,10 @@ const addNews = event => {
   addNewsForm.reset();
   // Set default image
   imgPlaceholder.src = 'img/img-placeholder.png';
-  showModalSuccess();
+  showModal(
+    'success-message',
+    'Success! News has been added!'
+  );
 };
 
 document.addEventListener('DOMContentLoaded', () => {

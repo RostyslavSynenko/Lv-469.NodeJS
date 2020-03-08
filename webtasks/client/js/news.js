@@ -1,9 +1,7 @@
 const newsContainer = document.querySelector(
   '.news-container'
 );
-const isOnline = () => window.navigator.onLine;
-const useLocalStorage =
-  localStorage.getItem('useLocalStorage') === 'true';
+
 let wasRendered = false;
 
 const createNews = ({ imgSrc, title, content }) => {
@@ -26,6 +24,7 @@ const addNewsToThePage = allNews => {
 
 const renderNews = (online = isOnline()) => {
   if (online) {
+    // server
     getData('news').then(({ data: { news } }) => {
       addNewsToThePage(news);
     });

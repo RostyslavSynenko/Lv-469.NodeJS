@@ -6,11 +6,6 @@ const appealMessage = appealForm.querySelector('textarea');
 
 let wasRendered = false;
 
-const useLocalStorage =
-  localStorage.getItem('useLocalStorage') === 'true';
-
-const isOnline = () => window.navigator.onLine;
-
 let footballFanCount =
   localStorage.getItem('footballFanCount') || 3;
 
