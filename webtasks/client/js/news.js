@@ -1,5 +1,5 @@
 const newsContainer = document.querySelector(
-  '.news-container',
+  '.news-container'
 );
 const isOnline = () => window.navigator.onLine;
 const useLocalStorage =
@@ -25,10 +25,10 @@ const renderNews = (online = isOnline()) => {
   } else if (useLocalStorage) {
     if (localStorage.getItem('news')) {
       const allNews = JSON.parse(
-        localStorage.getItem('news'),
+        localStorage.getItem('news')
       );
 
-      allNews.forEach((data) => {
+      allNews.forEach(data => {
         const news = createNews(data);
 
         newsContainer.insertAdjacentHTML('beforeend', news);
@@ -36,8 +36,8 @@ const renderNews = (online = isOnline()) => {
     }
   } else {
     // indexedDB
-    database.getFromStore('news').then((allNews) => {
-      allNews.forEach((data) => {
+    database.getFromStore('news').then(allNews => {
+      allNews.forEach(data => {
         const news = createNews(data);
 
         newsContainer.insertAdjacentHTML('beforeend', news);
@@ -50,10 +50,10 @@ const sendDataFromStorageToServer = () => {
   if (useLocalStorage) {
     if (localStorage.getItem('news')) {
       const allNews = JSON.parse(
-        localStorage.getItem('news'),
+        localStorage.getItem('news')
       );
 
-      allNews.forEach((news) => sendData('news', news));
+      allNews.forEach(news => sendData('news', news));
 
       if (!wasRendered) {
         renderNews(false);
@@ -63,8 +63,8 @@ const sendDataFromStorageToServer = () => {
     }
   } else {
     // indexedDB
-    database.getFromStore('news').then((allNews) => {
-      allNews.forEach((news) => sendData('news', news));
+    database.getFromStore('news').then(allNews => {
+      allNews.forEach(news => sendData('news', news));
     });
 
     if (!wasRendered) {
@@ -78,7 +78,7 @@ const sendDataFromStorageToServer = () => {
 document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener(
     'online',
-    sendDataFromStorageToServer,
+    sendDataFromStorageToServer
   );
 
   setTimeout(() => {

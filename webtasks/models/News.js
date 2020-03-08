@@ -4,16 +4,16 @@ const { Schema } = mongoose;
 const newsSchema = new Schema({
   imgSrc: {
     type: String,
-    required: true,
+    required: true
   },
   title: {
     type: String,
-    required: true,
+    required: true
   },
   content: {
     type: String,
-    required: true,
-  },
+    required: true
+  }
 });
 
 module.exports = mongoose.model('news', newsSchema);

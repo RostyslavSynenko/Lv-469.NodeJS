@@ -1,28 +1,28 @@
 const addNewsForm = document.querySelector(
-  '.admin-section form',
+  '.admin-section form'
 );
 const newsImage = document.getElementById('news-image');
 const newsTitle = document.getElementById('news-title');
 const newsText = document.getElementById('news-text');
 const imgPlaceholder = document.querySelector(
-  '.img-placeholder',
+  '.img-placeholder'
 );
 const data = {
   id: null,
   imgSrc: '',
   title: '',
-  content: '',
+  content: ''
 };
 
 const useLocalStorage =
   localStorage.getItem('useLocalStorage') === 'true';
 const isOnline = () => window.navigator.onLine;
 
-const handleFiles = (event) => {
+const handleFiles = event => {
   const file = event.target.files[0];
   const fileReader = new FileReader();
 
-  fileReader.onload = (event) => {
+  fileReader.onload = event => {
     if (!event.target.result) return;
 
     imgPlaceholder.src = event.target.result;
@@ -35,10 +35,10 @@ const handleFiles = (event) => {
 const removeError = () => {
   addNewsForm
     .querySelectorAll('.error')
-    .forEach((el) => el.classList.remove('error'));
+    .forEach(el => el.classList.remove('error'));
   addNewsForm
     .querySelectorAll('.error-message')
-    .forEach((el) => el.remove());
+    .forEach(el => el.remove());
 };
 
 const addError = (anchor, message) => {
@@ -50,7 +50,7 @@ const addError = (anchor, message) => {
 
   if (anchor.type === 'file') {
     const customImgUpload = addNewsForm.querySelector(
-      '.custom-img-upload',
+      '.custom-img-upload'
     );
 
     customImgUpload.after(errorMessage);
@@ -79,7 +79,7 @@ const validateForm = () => {
     isError = addError(
       newsTitle,
       `Title must contain at least ${minTitleLength +
-        1} and maximum ${maxTitleLength + 1} symbols`,
+        1} and maximum ${maxTitleLength + 1} symbols`
     );
   }
 
@@ -89,7 +89,7 @@ const validateForm = () => {
     isError = addError(
       newsText,
       `News must contain at least ${minNewsLength +
-        1} symbols`,
+        1} symbols`
     );
   }
 
@@ -108,7 +108,7 @@ const showModalSuccess = () => {
   }, 3000);
 };
 
-const setNewsToStorage = (newData) => {
+const setNewsToStorage = newData => {
   if (useLocalStorage) {
     if (localStorage.getItem('news')) {
       const news = JSON.parse(localStorage.getItem('news'));
@@ -117,7 +117,7 @@ const setNewsToStorage = (newData) => {
     } else {
       localStorage.setItem(
         'news',
-        JSON.stringify([newData]),
+        JSON.stringify([newData])
       );
     }
   } else {
@@ -125,7 +125,7 @@ const setNewsToStorage = (newData) => {
   }
 };
 
-const addNews = (event) => {
+const addNews = event => {
   event.preventDefault();
 
   removeError();
@@ -137,6 +137,7 @@ const addNews = (event) => {
   data.id = Date.now();
   data.title = newsTitle.value;
   data.content = newsText.value;
+  console.log(data);
 
   if (isOnline()) {
     // send data to the server

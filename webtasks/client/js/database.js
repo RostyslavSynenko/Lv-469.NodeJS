@@ -7,27 +7,27 @@ class IndexedDB {
   initializeDB(version) {
     const request = indexedDB.open(
       this.nameDB,
-      (version = 1),
+      (version = 1)
     );
 
-    request.onupgradeneeded = (event) => {
+    request.onupgradeneeded = event => {
       this.db = event.target.result;
-      this.stores.forEach((store) => {
+      this.stores.forEach(store => {
         this.db.createObjectStore(store, {
-          keyPath: 'id',
+          keyPath: 'id'
         });
       });
 
       console.log(
-        `${this.nameDB} database has been created or updated!`,
+        `${this.nameDB} database has been created or updated!`
       );
     };
 
-    request.onsuccess = (event) => {
+    request.onsuccess = event => {
       this.db = event.target.result;
 
       console.log(
-        `Successfuly connected to the ${this.nameDB} database!`,
+        `Successfuly connected to the ${this.nameDB} database!`
       );
     };
     request.onerror = () =>
@@ -37,7 +37,7 @@ class IndexedDB {
   addToStore(storeName, data) {
     const transaction = this.db.transaction(
       storeName,
-      'readwrite',
+      'readwrite'
     );
     const store = transaction.objectStore(storeName);
     const request = store.add(data);
@@ -70,14 +70,14 @@ class IndexedDB {
   clearStore(storeName) {
     const transaction = this.db.transaction(
       storeName,
-      'readwrite',
+      'readwrite'
     );
     const store = transaction.objectStore(storeName);
     const request = store.clear();
 
     request.onsuccess = () =>
       console.log(
-        `Success! ${storeName} has been cleared!`,
+        `Success! ${storeName} has been cleared!`
       );
 
     request.onerror = () =>
@@ -87,7 +87,7 @@ class IndexedDB {
 
 const database = new IndexedDB('SSITA', [
   'fanComments',
-  'news',
+  'news'
 ]);
 
 database.initializeDB();

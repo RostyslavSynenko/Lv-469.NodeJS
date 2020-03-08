@@ -1,7 +1,7 @@
 const hamburger = document.querySelector('.hamburger-icon');
 const matches = document.querySelector('.matches');
 const dropDownContent = document.querySelector(
-  '.dropdown-content',
+  '.dropdown-content'
 );
 localStorage.setItem('useLocalStorage', false);
 
@@ -19,31 +19,34 @@ const openMenu = () => {
   menu.classList.toggle('toggle-hamburger');
 };
 
-const getData = async (title) => {
+const getData = async title => {
   const response = await fetch(
-    `http://localhost:5000/api/${title}`,
+    `http://localhost:5000/api/${title}`
   );
   const result = await response.json();
-
-  return new Promise((resolve) => resolve(result));
+  return new Promise(resolve => resolve(result));
 };
 
 const sendData = async (title, data) => {
-  const response = await fetch(
-    `http://localhost:5000/api/${title}`,
-    {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify(data),
-    },
-  );
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/${title}`,
+      {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(data)
+      }
+    );
 
-  const result = await response.json();
+    let result = await response.json();
 
-  return new Promise((resolve) => resolve(result));
+    return new Promise(resolve => resolve(result));
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 hamburger.addEventListener('click', openMenu);

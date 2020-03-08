@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
 
     return res.status(200).send({
       error: false,
-      comments,
+      comments
     });
   } catch (error) {
     return res.status(500).send({ error });

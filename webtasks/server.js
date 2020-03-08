@@ -21,12 +21,12 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    useCreateIndex: true,
+    useCreateIndex: true
   })
   .then(() => {
     console.log('Connection to database established');
   })
-  .catch((err) => {
+  .catch(err => {
     console.log(`DB error ${err.message}`);
   });
 

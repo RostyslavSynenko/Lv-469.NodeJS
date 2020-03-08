@@ -17,8 +17,6 @@ router.post('/', async (req, res) => {
     const { body } = req;
     const news = await News.create(body);
 
-    console.log(news);
-
     return res.status(201).send({ error: false, news });
   } catch (error) {
     return res.status(500).send({ error });

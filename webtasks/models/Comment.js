@@ -4,16 +4,16 @@ const { Schema } = mongoose;
 const commentsSchema = new Schema({
   comment: {
     type: String,
-    required: true,
+    required: true
   },
   author: {
     type: String,
-    required: true,
+    required: true
   },
   date: {
     type: String,
-    required: true,
-  },
+    required: true
+  }
 });
 
 module.exports = mongoose.model('comments', commentsSchema);
