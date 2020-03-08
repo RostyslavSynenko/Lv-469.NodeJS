@@ -137,7 +137,6 @@ const addNews = event => {
   data.id = Date.now();
   data.title = newsTitle.value;
   data.content = newsText.value;
-  console.log(data);
 
   if (isOnline()) {
     // send data to the server

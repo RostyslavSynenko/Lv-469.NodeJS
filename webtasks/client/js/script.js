@@ -20,30 +20,21 @@ const openMenu = () => {
 };
 
 const getData = async title => {
-  const response = await fetch(
-    `http://localhost:5000/api/${title}`
-  );
-  const result = await response.json();
-  return new Promise(resolve => resolve(result));
+  try {
+    return await axios.get(
+      `http://localhost:5000/api/${title}`
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const sendData = async (title, data) => {
   try {
-    const response = await fetch(
+    return await axios.post(
       `http://localhost:5000/api/${title}`,
-      {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(data)
-      }
+      data
     );
-
-    let result = await response.json();
-
-    return new Promise(resolve => resolve(result));
   } catch (error) {
     console.log(error);
   }

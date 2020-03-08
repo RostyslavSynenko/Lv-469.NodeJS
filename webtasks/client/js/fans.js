@@ -88,11 +88,7 @@ const renderComments = (online = isOnline()) => {
   if (online) {
     // get data from server and render
     getData('comments')
-      .then(({ error, comments }) => {
-        if (error) {
-          return console.error(error);
-        }
-
+      .then(({ data: { comments } }) => {
         addCommentsToThePage(comments);
       })
       .catch(error => {

@@ -16,32 +16,29 @@ const createNews = ({ imgSrc, title, content }) => {
   `;
 };
 
+const addNewsToThePage = allNews => {
+  allNews.forEach(data => {
+    const news = createNews(data);
+
+    newsContainer.insertAdjacentHTML('beforeend', news);
+  });
+};
+
 const renderNews = (online = isOnline()) => {
   if (online) {
-    /*
-     get data from server and render
-
-    */
+    getData('news').then(({ data: { news } }) => {
+      addNewsToThePage(news);
+    });
   } else if (useLocalStorage) {
     if (localStorage.getItem('news')) {
-      const allNews = JSON.parse(
-        localStorage.getItem('news')
-      );
+      const news = JSON.parse(localStorage.getItem('news'));
 
-      allNews.forEach(data => {
-        const news = createNews(data);
-
-        newsContainer.insertAdjacentHTML('beforeend', news);
-      });
+      addNewsToThePage(news);
     }
   } else {
     // indexedDB
-    database.getFromStore('news').then(allNews => {
-      allNews.forEach(data => {
-        const news = createNews(data);
-
-        newsContainer.insertAdjacentHTML('beforeend', news);
-      });
+    database.getFromStore('news').then(news => {
+      addNewsToThePage(news);
     });
   }
 };
