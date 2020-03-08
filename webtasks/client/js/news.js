@@ -2,9 +2,8 @@ const newsContainer = document.querySelector(
   '.news-container',
 );
 const isOnline = () => window.navigator.onLine;
-const useLocalStorage = localStorage.getItem(
-  'useLocalStorage',
-);
+const useLocalStorage =
+  localStorage.getItem('useLocalStorage') === 'true';
 let wasRendered = false;
 
 const createNews = ({ imgSrc, title, content }) => {
@@ -19,7 +18,10 @@ const createNews = ({ imgSrc, title, content }) => {
 
 const renderNews = (online = isOnline()) => {
   if (online) {
-    // get data from server and render
+    /*
+     get data from server and render
+
+    */
   } else if (useLocalStorage) {
     if (localStorage.getItem('news')) {
       const allNews = JSON.parse(
@@ -47,13 +49,11 @@ const renderNews = (online = isOnline()) => {
 const sendDataFromStorageToServer = () => {
   if (useLocalStorage) {
     if (localStorage.getItem('news')) {
-      const news = JSON.parse(localStorage.getItem('news'));
+      const allNews = JSON.parse(
+        localStorage.getItem('news'),
+      );
 
-      /*
-      
-      SEND DATA TO THE SERVER
-      
-      */
+      allNews.forEach((news) => sendData('news', news));
 
       if (!wasRendered) {
         renderNews(false);
@@ -63,12 +63,8 @@ const sendDataFromStorageToServer = () => {
     }
   } else {
     // indexedDB
-    database.getFromStore('news').then((news) => {
-      /*
-      
-      SEND DATA TO THE SERVER
-      
-      */
+    database.getFromStore('news').then((allNews) => {
+      allNews.forEach((news) => sendData('news', news));
     });
 
     if (!wasRendered) {

@@ -15,9 +15,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (res, req) => {
+router.post('/', async (req, res) => {
   try {
-    const { body } = res;
+    const { body } = req;
     const comment = await Comment.create(body);
 
     return res.status(201).send({ error: false, comment });

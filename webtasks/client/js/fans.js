@@ -59,11 +59,6 @@ const setCommentToStorage = (comment) => {
       JSON.stringify([comment]),
     );
   }
-
-  localStorage.setItem(
-    'footballFanCount',
-    footballFanCount,
-  );
 };
 
 const createComment = ({ comment, author, date }) => {
@@ -147,9 +142,17 @@ const sendAppeal = (event) => {
     date,
   };
 
+  localStorage.setItem(
+    'footballFanCount',
+    footballFanCount,
+  );
+
   if (isOnline()) {
     // send to server
-    sendData('comments', comment);
+
+    sendData('comments', comment).then(({ comment }) => {
+      addCommentsToThePage([comment]);
+    });
   } else {
     if (useLocalStorage) {
       setCommentToStorage(comment);

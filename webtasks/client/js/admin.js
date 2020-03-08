@@ -140,6 +140,7 @@ const addNews = (event) => {
 
   if (isOnline()) {
     // send data to the server
+    sendData('news', data);
   } else {
     if (useLocalStorage) {
       setNewsToStorage(data);

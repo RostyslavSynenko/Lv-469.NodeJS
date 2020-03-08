@@ -33,12 +33,14 @@ const sendData = async (title, data) => {
     `http://localhost:5000/api/${title}`,
     {
       method: 'POST',
+      mode: 'no-cors',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: JSON.stringify(data),
     },
   );
+
   const result = await response.json();
 
   return new Promise((resolve) => resolve(result));

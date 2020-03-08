@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const News = require('../models/News');
 
-router.get('/api/news', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const news = await News.find();
 
@@ -12,13 +12,15 @@ router.get('/api/news', async (req, res) => {
   }
 });
 
-router.post('/api/news', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { body } = req;
     const news = await News.create(body);
 
+    console.log(news);
+
     return res.status(201).send({ error: false, news });
-  } catch {
+  } catch (error) {
     return res.status(500).send({ error });
   }
 });
