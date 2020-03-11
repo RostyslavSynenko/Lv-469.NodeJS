@@ -4,8 +4,6 @@ const commentsSection = document.querySelector(
 const appealForm = document.querySelector('.appeal-form');
 const appealMessage = appealForm.querySelector('textarea');
 
-let wasRendered = false;
-
 let footballFanCount =
   localStorage.getItem('footballFanCount') || 3;
 
@@ -79,9 +77,9 @@ const addCommentsToThePage = comments => {
   });
 };
 
-const renderComments = (online = isOnline()) => {
-  if (online) {
-    // get data from server and render
+// Render comments from MongoDB
+const renderComments = () => {
+  if (isOnline()) {
     getData('comments')
       .then(({ data: { comments } }) => {
         addCommentsToThePage(comments);
@@ -89,19 +87,6 @@ const renderComments = (online = isOnline()) => {
       .catch(error => {
         console.log('Error: ', error);
       });
-  } else if (useLocalStorage) {
-    if (localStorage.getItem('fanComments')) {
-      const comments = JSON.parse(
-        localStorage.getItem('fanComments')
-      );
-
-      addCommentsToThePage(comments);
-    }
-  } else {
-    // indexedDB
-    database.getFromStore('fanComments').then(response => {
-      addCommentsToThePage(response);
-    });
   }
 };
 
@@ -138,11 +123,8 @@ const sendAppeal = event => {
 
   if (isOnline()) {
     // send to server
-
-    sendData('comments', comment).then(response => {
-      console.log(response);
-      addCommentsToThePage([comment]);
-    });
+    sendData('comments', comment);
+    addCommentsToThePage([comment]);
   } else {
     if (useLocalStorage) {
       setCommentToStorage(comment);
@@ -163,27 +145,21 @@ const sendDataFromStorageToServer = () => {
         localStorage.getItem('fanComments')
       );
 
-      comments.forEach(comment =>
-        sendData('comments', comment)
-      );
-
-      if (!wasRendered) {
-        renderComments(false);
-      }
+      comments.forEach(comment => {
+        sendData('comments', comment);
+        addCommentsToThePage([comment]);
+      });
 
       localStorage.removeItem('fanComments');
     }
   } else {
     // indexedDB
     database.getFromStore('fanComments').then(comments => {
-      comments.forEach(comment =>
-        sendData('comments', comment)
-      );
+      comments.forEach(comment => {
+        sendData('comments', comment);
+        addCommentsToThePage([comment]);
+      });
     });
-
-    if (!wasRendered) {
-      renderComments(false);
-    }
 
     database.clearStore('fanComments');
   }
@@ -196,9 +172,5 @@ document.addEventListener('DOMContentLoaded', () => {
     sendDataFromStorageToServer
   );
 
-  setTimeout(() => {
-    renderComments();
-
-    wasRendered = true;
-  }, 500);
+  setTimeout(renderComments, 500);
 });

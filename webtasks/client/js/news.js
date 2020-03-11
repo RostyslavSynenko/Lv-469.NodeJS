@@ -2,8 +2,6 @@ const newsContainer = document.querySelector(
   '.news-container'
 );
 
-let wasRendered = false;
-
 const createNews = ({ imgSrc, title, content }) => {
   return `
     <div class="news">
@@ -22,21 +20,10 @@ const addNewsToThePage = allNews => {
   });
 };
 
-const renderNews = (online = isOnline()) => {
-  if (online) {
+const renderNews = () => {
+  if (isOnline()) {
     // server
     getData('news').then(({ data: { news } }) => {
-      addNewsToThePage(news);
-    });
-  } else if (useLocalStorage) {
-    if (localStorage.getItem('news')) {
-      const news = JSON.parse(localStorage.getItem('news'));
-
-      addNewsToThePage(news);
-    }
-  } else {
-    // indexedDB
-    database.getFromStore('news').then(news => {
       addNewsToThePage(news);
     });
   }
@@ -49,23 +36,22 @@ const sendDataFromStorageToServer = () => {
         localStorage.getItem('news')
       );
 
-      allNews.forEach(news => sendData('news', news));
-
-      if (!wasRendered) {
-        renderNews(false);
-      }
+      allNews.forEach(news => {
+        sendData('news', news);
+        console.log(news);
+        addNewsToThePage([news]);
+      });
 
       localStorage.removeItem('news');
     }
   } else {
     // indexedDB
     database.getFromStore('news').then(allNews => {
-      allNews.forEach(news => sendData('news', news));
+      allNews.forEach(news => {
+        sendData('news', news);
+        addNewsToThePage([news]);
+      });
     });
-
-    if (!wasRendered) {
-      renderNews(false);
-    }
 
     database.clearStore('news');
   }
@@ -77,9 +63,5 @@ document.addEventListener('DOMContentLoaded', () => {
     sendDataFromStorageToServer
   );
 
-  setTimeout(() => {
-    renderNews();
-
-    wasRendered = true;
-  }, 500);
+  setTimeout(renderNews, 500);
 });
