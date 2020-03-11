@@ -172,5 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
     sendDataFromStorageToServer
   );
 
-  setTimeout(renderComments, 500);
+  setTimeout(() => {
+    renderComments();
+    if (isOnline()) {
+      sendDataFromStorageToServer();
+    }
+  }, 500);
 });

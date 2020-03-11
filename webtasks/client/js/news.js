@@ -63,5 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
     sendDataFromStorageToServer
   );
 
-  setTimeout(renderNews, 500);
+  setTimeout(() => {
+    renderNews();
+    if (isOnline()) {
+      sendDataFromStorageToServer();
+    }
+  }, 500);
 });
