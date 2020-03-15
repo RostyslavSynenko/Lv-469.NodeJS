@@ -24,18 +24,6 @@ const removeError = () => {
     .forEach(el => el.remove());
 };
 
-const showModalSuccess = () => {
-  const successMessage = document.createElement('div');
-  successMessage.classList.add('success-message');
-  successMessage.innerHTML =
-    'Success! Appeal has been added!';
-
-  document.body.append(successMessage);
-  setTimeout(() => {
-    successMessage.remove();
-  }, 3000);
-};
-
 const setCommentToStorage = comment => {
   if (localStorage.getItem('fanComments')) {
     const comments = JSON.parse(
@@ -79,15 +67,13 @@ const addCommentsToThePage = comments => {
 
 // Render comments from MongoDB
 const renderComments = () => {
-  if (isOnline()) {
-    getData('comments')
-      .then(({ data: { comments } }) => {
-        addCommentsToThePage(comments);
-      })
-      .catch(error => {
-        console.log('Error: ', error);
-      });
-  }
+  getData('comments')
+    .then(({ data: { comments } }) => {
+      addCommentsToThePage(comments);
+    })
+    .catch(error => {
+      console.log('Error: ', error);
+    });
 };
 
 const sendAppeal = event => {
@@ -135,7 +121,18 @@ const sendAppeal = event => {
   }
 
   appealForm.reset();
-  showModalSuccess();
+
+  if (isOnline()) {
+    showModal(
+      'success-message',
+      'Success! Comment has been added!'
+    );
+  } else {
+    showModal(
+      'warning-message',
+      'You are offline! Comment will be added later!'
+    );
+  }
 };
 
 const sendDataFromStorageToServer = () => {
@@ -155,13 +152,14 @@ const sendDataFromStorageToServer = () => {
   } else {
     // indexedDB
     database.getFromStore('fanComments').then(comments => {
-      comments.forEach(comment => {
-        sendData('comments', comment);
-        addCommentsToThePage([comment]);
-      });
+      if (comments.length) {
+        comments.forEach(comment => {
+          sendData('comments', comment);
+          addCommentsToThePage([comment]);
+        });
+        database.clearStore('fanComments');
+      }
     });
-
-    database.clearStore('fanComments');
   }
 };
 
@@ -172,9 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
     sendDataFromStorageToServer
   );
 
+  // indexedDB may not be connected yet
   setTimeout(() => {
-    renderComments();
     if (isOnline()) {
+      renderComments();
       sendDataFromStorageToServer();
     }
   }, 500);

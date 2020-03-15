@@ -21,12 +21,14 @@ const addNewsToThePage = allNews => {
 };
 
 const renderNews = () => {
-  if (isOnline()) {
-    // server
-    getData('news').then(({ data: { news } }) => {
+  // server
+  getData('news')
+    .then(({ data: { news } }) => {
       addNewsToThePage(news);
+    })
+    .catch(error => {
+      console.log('Error: ', error);
     });
-  }
 };
 
 const sendDataFromStorageToServer = () => {
@@ -47,13 +49,14 @@ const sendDataFromStorageToServer = () => {
   } else {
     // indexedDB
     database.getFromStore('news').then(allNews => {
-      allNews.forEach(news => {
-        sendData('news', news);
-        addNewsToThePage([news]);
-      });
+      if (allNews.length) {
+        allNews.forEach(news => {
+          sendData('news', news);
+          addNewsToThePage([news]);
+        });
+        database.clearStore('news');
+      }
     });
-
-    database.clearStore('news');
   }
 };
 
@@ -63,9 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     sendDataFromStorageToServer
   );
 
+  // indexedDB may not be connected yet
   setTimeout(() => {
-    renderNews();
     if (isOnline()) {
+      renderNews();
       sendDataFromStorageToServer();
     }
   }, 500);

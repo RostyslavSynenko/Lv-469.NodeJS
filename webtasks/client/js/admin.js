@@ -92,17 +92,6 @@ const validateForm = () => {
   return isError;
 };
 
-const showModal = (className, message) => {
-  const modal = document.createElement('div');
-  modal.classList.add(className);
-  modal.innerHTML = message;
-
-  document.body.append(modal);
-  setTimeout(() => {
-    modal.remove();
-  }, 3000);
-};
-
 const setNewsToStorage = newData => {
   if (useLocalStorage) {
     if (localStorage.getItem('news')) {
@@ -148,10 +137,18 @@ const addNews = event => {
   addNewsForm.reset();
   // Set default image
   imgPlaceholder.src = 'img/img-placeholder.png';
-  showModal(
-    'success-message',
-    'Success! News has been added!'
-  );
+
+  if (isOnline()) {
+    showModal(
+      'success-message',
+      'Success! News has been added!'
+    );
+  } else {
+    showModal(
+      'warning-message',
+      'You are offline! News will be added later!'
+    );
+  }
 };
 
 document.addEventListener('DOMContentLoaded', () => {

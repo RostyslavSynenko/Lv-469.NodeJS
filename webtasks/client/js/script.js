@@ -24,6 +24,17 @@ const openMenu = () => {
   menu.classList.toggle('toggle-hamburger');
 };
 
+const showModal = (className, message) => {
+  const modal = document.createElement('div');
+  modal.classList.add(className);
+  modal.innerHTML = message;
+
+  document.body.append(modal);
+  setTimeout(() => {
+    modal.remove();
+  }, 3000);
+};
+
 const getData = async title => {
   try {
     return await axios.get(
